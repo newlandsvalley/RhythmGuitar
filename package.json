@@ -1,0 +1,21 @@
+{
+  "name": "rhythm-guitar",
+  "version": "0.1.0",
+  "description": "chord positions for a midi rhythm guitar",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+
+  "scripts": {
+    "build": "spago build",
+    "test": "spago -x ./test.dhall test"
+  },
+  "devDependencies": {
+    "purescript": "^0.14.3",
+    "purescript-psa": "^0.6.0",
+    "spago": "^0.20.3"
+  },
+  "author": "John Watson",
+  "license": "MIT"
+}
