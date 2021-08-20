@@ -3,10 +3,10 @@ module RhythmGuitar.Normalise where
 
 import Control.Alt ((<|>))
 import Data.Either (Either)
-import Prelude ((<>), (<$), (<$>), (<*>))
+import Prelude ((<>), (<$), (<$>), (<*>), (<*))
 import Text.Parsing.StringParser (Parser, ParseError, runParser)
 import Text.Parsing.StringParser.CodePoints (string, regex)
-import Text.Parsing.StringParser.Combinators (option)
+import Text.Parsing.StringParser.Combinators (option, optionMaybe)
 
 
 -- | Entry point - Parse a chord symbol
@@ -16,7 +16,7 @@ parse s =
 
 chordSymbol :: Parser String
 chordSymbol =
-  buildChordSymbol <$> rootNote <*> quality <*> extended
+  buildChordSymbol <$> rootNote <*> quality <*> extended <* optionalSlashNote
 
 rootNote :: Parser String 
 rootNote = enharmonicEquivalence <$> ((<>) <$> pitchClass <*> accidental)
@@ -31,7 +31,7 @@ accidental =
 
 quality :: Parser String 
 quality =
-  option "" (major <|> minor <|> diminished <|> augmented)
+  option "" (major <|> minor <|> diminished <|> augmented <|> suspended)
 
 major :: Parser String 
 major =  
@@ -47,11 +47,24 @@ diminished =
 
 augmented :: Parser String
 augmented = 
-  string "+"      
+  string "+"     
+
+suspended :: Parser String
+suspended = 
+  string "sus"    
 
 extended :: Parser String 
 extended = 
   option "" (regex "[79]")
+
+-- we throw away any slashed base note after the chord symbol proper
+optionalSlashNote :: Parser String
+optionalSlashNote = 
+  "" <$ optionMaybe slashNote
+ 
+slashNote :: Parser String 
+slashNote = 
+  (<>) <$> string "/" <*> rootNote
 
 buildChordSymbol :: String -> String -> String -> String 
 buildChordSymbol root qual extension = 
@@ -65,6 +78,7 @@ enharmonicEquivalence = case _ of
   "Gb" -> "F#"
   "Ab" -> "G#"
   x -> x
+
 
 
 

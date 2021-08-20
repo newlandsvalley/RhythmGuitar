@@ -2,7 +2,6 @@ module Test.Main where
 
 import Control.Monad.Free (Free)
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Prelude ((<>), Unit, discard, show)
 import Test.Unit (Test, TestF, suite, test, failure)
@@ -33,6 +32,7 @@ main = runTest do
   identitySuite
   normaliseSuite
   enharmonicEquivalenceSuite
+  ignoredSlashNoteSuite
 
 identitySuite :: Free TestF Unit
 identitySuite =
@@ -51,6 +51,8 @@ identitySuite =
       assertRoundTrip "G#dim"
     test "A augmented" do  
       assertRoundTrip "A+"
+    test "C suspended" do  
+      assertRoundTrip "Csus"
     test "C# augmented" do  
       assertRoundTrip "C#+"
     test "D7" do  
@@ -89,3 +91,10 @@ enharmonicEquivalenceSuite =
       assertCanonical "G#m7" "Abm7"     
     test "Bb minor" do  
       assertCanonical "A#m" "Bbmin"    
+
+
+ignoredSlashNoteSuite :: Free TestF Unit
+ignoredSlashNoteSuite =         
+  suite "ignored slash note" do     
+    test "C/G" do  
+      assertCanonical "C" "C/G"             
