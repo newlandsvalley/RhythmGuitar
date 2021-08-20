@@ -5,7 +5,6 @@ import Foreign (MultipleErrors)
 import RhythmGuitar.Types as Guitar
 import Simple.JSON as JSON
 
-
 writeChords :: Guitar.ChordShapes -> String
 writeChords =
   JSON.writeJSON

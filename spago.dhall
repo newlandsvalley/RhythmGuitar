@@ -11,15 +11,23 @@ When creating a new Spago project, you can use
 to generate this file without the comments in this block.
 -}
 { name = "rhythm-guitar"
-, dependencies = [ "console"
-                 , "effect"
-                 , "either"
-                 , "foreign"
-                 , "prelude"
-                 , "psci-support" 
-                 , "simple-json"
-                 , "soundfonts"
-                 ]
+, dependencies =
+  [ "aff"
+  , "affjax"
+  , "console"
+  , "debug"
+  , "effect"
+  , "either"
+  , "foreign"
+  , "http-methods"
+  , "maybe"
+  , "ordered-collections"
+  , "prelude"
+  , "psci-support"
+  , "simple-json"
+  , "soundfonts"
+  , "tuples"
+  ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
 }

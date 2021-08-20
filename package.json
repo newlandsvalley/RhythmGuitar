@@ -9,7 +9,8 @@
 
   "scripts": {
     "build": "spago build",
-    "test": "spago -x ./test.dhall test"
+    "test": "spago -x ./test.dhall test",
+    "example" : "spago -x ./example.dhall bundle-app --main Example.Main --to example/dist/app.js"
   },
   "devDependencies": {
     "purescript": "^0.14.3",

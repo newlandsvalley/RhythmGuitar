@@ -1,0 +1,100 @@
+module PlayerComponent where
+
+import Audio.SoundFont (Instrument, loadRemoteSoundFonts)
+import Data.Map (empty) as Map
+import Data.Maybe (Maybe(..))
+import Data.Midi.Instrument (InstrumentName(..))
+import Data.Time.Duration (Milliseconds(..))
+import Effect.Aff.Class (class MonadAff, liftAff)
+import Effect.Aff (delay)
+import Effect.Class (liftEffect)
+import Halogen as H
+import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
+import Halogen.HTML.Properties as HP
+import Halogen.HTML.Core (ClassName(..))
+import Prelude (Unit, ($), bind, pure, unit)
+import RhythmGuitar.Types (ChordMap)
+import RhythmGuitar.Audio (buildDefaultChordMap, playChordSymbol)
+import RhythmGuitar.Network (loadDefaultChordShapes)
+
+type State =
+  { instruments :: Array Instrument
+  , chordMap :: ChordMap
+  }
+
+type ChildSlots :: forall k. Row k
+type ChildSlots = ()
+
+data Action
+  = Initialize
+  | Play
+
+-- | The component definition
+component
+  :: forall q i o m
+   . MonadAff m
+  => H.Component q i o m
+component =
+  H.mkComponent
+    { initialState
+    , render
+    , eval: H.mkEval $ H.defaultEval
+        { handleAction = handleAction
+        , initialize = Just Initialize
+        , finalize = Nothing
+        }
+    }
+
+  where
+  initialState :: i -> State
+  initialState _ =
+    { instruments: []
+    , chordMap: Map.empty
+    }
+
+  render :: State -> H.ComponentHTML Action ChildSlots m
+  render _ =
+    HH.div_
+      [ renderPlayButton ]
+
+  renderPlayButton :: H.ComponentHTML Action ChildSlots m
+  renderPlayButton =
+    HH.div_
+      [ HH.button
+          [ HP.class_ $ ClassName "hoverable"
+          , HE.onClick (\_ -> Play)
+          ]
+          [ HH.text "play" ]
+      ]
+
+  handleAction ∷ Action -> H.HalogenM State Action ChildSlots o m Unit
+  handleAction = case _ of
+    Initialize -> do
+      -- we load piano to slot 0 (which we don't hear) and guitar to slot 1 (the config default)
+      instruments <- H.liftAff $ loadRemoteSoundFonts [ AcousticGrandPiano, AcousticGuitarSteel ]
+      chordShapes <- H.liftAff loadDefaultChordShapes
+      let
+        chordMap = buildDefaultChordMap chordShapes
+      H.modify_
+        ( \st -> st
+            { instruments = instruments
+            , chordMap = chordMap
+            }
+        )
+    Play -> do
+      state <- H.get
+      _ <- H.liftAff $ playSample state
+      pure unit
+
+playSample :: forall m. MonadAff m => State -> m Unit
+playSample state = do
+  _ <- liftEffect $ playChordSymbol state.instruments "C" state.chordMap
+  _ <- liftAff $ delay (Milliseconds 2000.0)
+  _ <- liftEffect $ playChordSymbol state.instruments "Am" state.chordMap
+  _ <- liftAff $ delay (Milliseconds 2000.0)
+  _ <- liftEffect $ playChordSymbol state.instruments "F" state.chordMap
+  _ <- liftAff $ delay (Milliseconds 2000.0)
+  _ <- liftEffect $ playChordSymbol state.instruments "G" state.chordMap
+  pure unit
+
