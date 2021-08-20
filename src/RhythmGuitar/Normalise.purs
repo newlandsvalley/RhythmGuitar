@@ -19,7 +19,7 @@ chordSymbol =
   buildChordSymbol <$> rootNote <*> quality <*> extended
 
 rootNote :: Parser String 
-rootNote = (<>) <$> pitchClass <*> accidental
+rootNote = enharmonicEquivalence <$> ((<>) <$> pitchClass <*> accidental)
 
 pitchClass :: Parser String
 pitchClass =
@@ -56,6 +56,15 @@ extended =
 buildChordSymbol :: String -> String -> String -> String 
 buildChordSymbol root qual extension = 
   root <> qual <> extension
+
+enharmonicEquivalence :: String -> String 
+enharmonicEquivalence = case _ of 
+  "Bb" -> "A#"
+  "Db" -> "C#"
+  "Eb" -> "D#"
+  "Gb" -> "F#"
+  "Ab" -> "G#"
+  x -> x
 
 
 

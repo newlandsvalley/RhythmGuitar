@@ -30,54 +30,62 @@ assertCanonical canonical s  =
 
 main :: Effect Unit
 main = runTest do
-  identitiesSuite
+  identitySuite
   normaliseSuite
+  enharmonicEquivalenceSuite
 
-identitiesSuite :: Free TestF Unit
-identitiesSuite =
+identitySuite :: Free TestF Unit
+identitySuite =
   suite "chord symbols requiring no normalisation" do
     test "A major" do  
       assertRoundTrip "A"
-    test "Bb major" do  
-      assertRoundTrip "Bb"
     test "C# major" do  
       assertRoundTrip "C#"
     test "D minor" do  
       assertRoundTrip "Dm"
-    test "Eb minor" do  
-      assertRoundTrip "Ebm"
     test "F# minor" do  
       assertRoundTrip "F#m"
     test "G diminished" do  
       assertRoundTrip "Gdim"
     test "G# diminished" do  
       assertRoundTrip "G#dim"
-    test "Ab diminished" do  
-      assertRoundTrip "Abdim"
     test "A augmented" do  
       assertRoundTrip "A+"
-    test "Bb augmented" do  
-      assertRoundTrip "Bb+"
     test "C# augmented" do  
       assertRoundTrip "C#+"
     test "D7" do  
       assertRoundTrip "D7"
-    test "Eb7" do  
-      assertRoundTrip "Eb7"
     test "F#7" do  
       assertRoundTrip "F#7" 
-      assertRoundTrip "F#m"
+    test "F#m7" do  
+      assertRoundTrip "F#m7"
     test "Gm7" do  
       assertRoundTrip "Gm7"
     test "G#m7" do  
       assertRoundTrip "G#m7"
-    test "Abm7" do  
-      assertRoundTrip "Abm7"
 
 normaliseSuite :: Free TestF Unit
 normaliseSuite =
   suite "chord symbols requiring simple substitution normalisation" do       
     test "A major" do  
       assertCanonical "A" "Amaj"      
+    test "B minor" do  
+      assertCanonical "Bm" "Bmin"
+
+enharmonicEquivalenceSuite :: Free TestF Unit
+enharmonicEquivalenceSuite =       
+  suite "enharmonic equivalence" do    
+    test "Bb major" do  
+      assertCanonical "A#" "Bb" 
+    test "Eb minor" do  
+      assertCanonical "D#m" "Ebm"
+    test "Ab diminished" do  
+      assertCanonical "G#dim" "Abdim"
+    test "Bb augmented" do  
+      assertCanonical "A#+" "Bb+"
+    test "Eb7" do  
+      assertCanonical "D#7" "Eb7"
+    test "Abm7" do  
+      assertCanonical "G#m7" "Abm7"     
     test "Bb minor" do  
-      assertCanonical "Bbm" "Bbmin"
+      assertCanonical "A#m" "Bbmin"    
