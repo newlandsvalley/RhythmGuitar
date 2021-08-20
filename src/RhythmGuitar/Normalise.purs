@@ -2,23 +2,17 @@ module RhythmGuitar.Normalise where
 
 
 import Control.Alt ((<|>))
-import Data.Either (Either(..))
+import Data.Either (Either)
 import Prelude ((<>), (<$), (<$>), (<*>))
 import Text.Parsing.StringParser (Parser, ParseError, runParser)
-import Text.Parsing.StringParser.CodePoints (string, eof, regex)
+import Text.Parsing.StringParser.CodePoints (string, regex)
 import Text.Parsing.StringParser.Combinators (option)
 
 
 -- | Entry point - Parse a chord symbol
 parse :: String -> Either ParseError String
 parse s =
-  case runParser chordSymbol s of
-    Right n ->
-      Right n
-
-    Left e ->
-      Left e
-
+  runParser chordSymbol s
 
 chordSymbol :: Parser String
 chordSymbol =
@@ -45,7 +39,7 @@ major =
 
 minor :: Parser String 
 minor =  
-  string "min" <|> string "m"
+  "m" <$ (string "min" <|> string "m")
 
 diminished :: Parser String
 diminished = 

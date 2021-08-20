@@ -1,6 +1,7 @@
 module PlayerComponent where
 
 import Audio.SoundFont (Instrument, loadRemoteSoundFonts)
+import Data.Foldable (traverse_)
 import Data.Map (empty) as Map
 import Data.Maybe (Maybe(..))
 import Data.Midi.Instrument (InstrumentName(..))
@@ -84,17 +85,18 @@ component =
         )
     Play -> do
       state <- H.get
-      _ <- H.liftAff $ playSample state
+      _ <- H.liftAff $ playChordSequence state [ "C", "Am", "F", "G"]
+      _ <- H.liftAff $ playChordSequence state [ "C#", "A#m", "F#", "G#"]
+      _ <- H.liftAff $ playChordSequence state [ "D", "Bm", "G", "A"]
       pure unit
 
-playSample :: forall m. MonadAff m => State -> m Unit
-playSample state = do
-  _ <- liftEffect $ playChordSymbol state.instruments "C" state.chordMap
+playChordSequence :: forall m. MonadAff m => State -> Array String -> m Unit
+playChordSequence state chordSymbols = do
+  traverse_ (playChord state) chordSymbols
+
+playChord :: forall m. MonadAff m => State -> String -> m Unit
+playChord state chordSymbol = do
+  _ <- liftEffect $ playChordSymbol state.instruments chordSymbol state.chordMap
   _ <- liftAff $ delay (Milliseconds 2000.0)
-  _ <- liftEffect $ playChordSymbol state.instruments "Am" state.chordMap
-  _ <- liftAff $ delay (Milliseconds 2000.0)
-  _ <- liftEffect $ playChordSymbol state.instruments "F" state.chordMap
-  _ <- liftAff $ delay (Milliseconds 2000.0)
-  _ <- liftEffect $ playChordSymbol state.instruments "G" state.chordMap
   pure unit
 

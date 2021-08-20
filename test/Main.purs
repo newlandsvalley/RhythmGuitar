@@ -18,14 +18,24 @@ assertRoundTrip s  =
 
     Left err ->
       failure ("parse failed: " <> (show err))
+      
+assertCanonical :: String -> String -> Test
+assertCanonical canonical s  =
+  case (parse s) of
+    Right chordSym ->
+      Assert.equal canonical chordSym
+
+    Left err ->
+      failure ("parse failed: " <> (show err))
 
 main :: Effect Unit
 main = runTest do
+  identitiesSuite
   normaliseSuite
 
-normaliseSuite :: Free TestF Unit
-normaliseSuite =
-  suite "normalise chord symbol" do
+identitiesSuite :: Free TestF Unit
+identitiesSuite =
+  suite "chord symbols requiring no normalisation" do
     test "A major" do  
       assertRoundTrip "A"
     test "Bb major" do  
@@ -55,7 +65,7 @@ normaliseSuite =
     test "Eb7" do  
       assertRoundTrip "Eb7"
     test "F#7" do  
-      assertRoundTrip "F#7"
+      assertRoundTrip "F#7" 
       assertRoundTrip "F#m"
     test "Gm7" do  
       assertRoundTrip "Gm7"
@@ -63,3 +73,11 @@ normaliseSuite =
       assertRoundTrip "G#m7"
     test "Abm7" do  
       assertRoundTrip "Abm7"
+
+normaliseSuite :: Free TestF Unit
+normaliseSuite =
+  suite "chord symbols requiring simple substitution normalisation" do       
+    test "A major" do  
+      assertCanonical "A" "Amaj"      
+    test "Bb minor" do  
+      assertCanonical "Bbm" "Bbmin"
