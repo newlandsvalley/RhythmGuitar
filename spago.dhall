@@ -15,6 +15,7 @@ to generate this file without the comments in this block.
   [ "aff"
   , "affjax"
   , "console"
+  , "control"
   , "debug"
   , "effect"
   , "either"
@@ -26,6 +27,7 @@ to generate this file without the comments in this block.
   , "psci-support"
   , "simple-json"
   , "soundfonts"
+  , "string-parsers"
   , "tuples"
   ]
 , packages = ./packages.dhall
