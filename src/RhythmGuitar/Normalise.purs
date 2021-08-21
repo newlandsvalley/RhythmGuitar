@@ -5,7 +5,8 @@ module RhythmGuitar.Normalise
 
 import Control.Alt ((<|>))
 import Data.Either (Either, either)
-import Prelude ((<>), (<$), (<$>), (<*>), (<*), const, identity)
+import Data.String (length)
+import Prelude ((<>), (<$), (<$>), (<*>), (<*), (&&), (==), const, identity)
 import Text.Parsing.StringParser (Parser, ParseError, runParser)
 import Text.Parsing.StringParser.CodePoints (string, regex)
 import Text.Parsing.StringParser.Combinators (option, optionMaybe)
@@ -75,7 +76,17 @@ slashNote =
 
 buildChordSymbol :: String -> String -> String -> String 
 buildChordSymbol root qual extension = 
-  root <> qual <> extension
+  root <> qual <> fullExtension
+
+  where 
+  -- ensure we label chord symbols marked merely as dim to be dim7
+  fullExtension = 
+    if (qual == "dim") && (length extension == 0)
+      then 
+        "7"
+      else 
+        extension
+
 
 enharmonicEquivalence :: String -> String 
 enharmonicEquivalence = case _ of 

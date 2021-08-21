@@ -89,6 +89,7 @@ component =
       _ <- H.liftAff $ playChordSequence state [ "C#", "A#m7", "F#", "G#7"]
       _ <- H.liftAff $ playChordSequence state [ "D", "Bm", "G", "A7"]
       _ <- H.liftAff $ playChordSequence state [ "F", "Dm7", "Bb", "C7"]
+      _ <- H.liftAff $ playChordSequence state [ "C", "C#dim7", "F#m7", "Ebdim7"]
       pure unit
 
 playChordSequence :: forall m. MonadAff m => State -> Array String -> m Unit

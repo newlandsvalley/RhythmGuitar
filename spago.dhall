@@ -28,6 +28,7 @@ to generate this file without the comments in this block.
   , "simple-json"
   , "soundfonts"
   , "string-parsers"
+  , "strings"
   , "tuples"
   ]
 , packages = ./packages.dhall
