@@ -89,7 +89,7 @@ component =
       _ <- H.liftAff $ playChordSequence state [ "C#", "A#m7", "F#", "G#7"]
       _ <- H.liftAff $ playChordSequence state [ "D", "Bm", "G", "A7"]
       _ <- H.liftAff $ playChordSequence state [ "F", "Dm7", "Bb", "C7"]
-      _ <- H.liftAff $ playChordSequence state [ "C", "C#dim7", "F#m7", "Ebdim7"]
+      _ <- H.liftAff $ playChordSequence state [ "Eb", "Edim7", "Fm7", "F#dim7", "Eb"]
       pure unit
 
 playChordSequence :: forall m. MonadAff m => State -> Array String -> m Unit
@@ -99,6 +99,6 @@ playChordSequence state chordSymbols = do
 playChord :: forall m. MonadAff m => State -> String -> m Unit
 playChord state chordSymbol = do
   _ <- liftEffect $ playChordSymbol state.instruments chordSymbol state.chordMap
-  _ <- liftAff $ delay (Milliseconds 2000.0)
+  _ <- liftAff $ delay (Milliseconds 1750.0)
   pure unit
 
