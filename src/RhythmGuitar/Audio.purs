@@ -10,6 +10,7 @@ import Data.Map (fromFoldable, lookup)
 import Data.Maybe (Maybe(..))
 import Prelude (map, pure)
 import RhythmGuitar.Types
+import RhythmGuitar.Normalise (normalise)
 import Data.Tuple (Tuple(..))
 
 import Debug (spy)
@@ -45,7 +46,7 @@ makeChord config pitches =
 playChordSymbol :: Array Instrument -> String -> ChordMap -> Effect Number
 playChordSymbol instruments chordSym chordMap = do
   let
-    mChord = lookup chordSym chordMap
+    mChord = lookup (normalise chordSym) chordMap
   case mChord of
     Just chord -> do
       let

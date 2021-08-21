@@ -1,15 +1,22 @@
-module RhythmGuitar.Normalise where
+module RhythmGuitar.Normalise 
+  ( normalise
+  , parse) where
 
 
 import Control.Alt ((<|>))
-import Data.Either (Either)
-import Prelude ((<>), (<$), (<$>), (<*>), (<*))
+import Data.Either (Either, either)
+import Prelude ((<>), (<$), (<$>), (<*>), (<*), const, identity)
 import Text.Parsing.StringParser (Parser, ParseError, runParser)
 import Text.Parsing.StringParser.CodePoints (string, regex)
 import Text.Parsing.StringParser.Combinators (option, optionMaybe)
 
+-- | Entry point - normalise a chord symbol to its canonical form
+-- | if it fails to parse, give back the original
+normalise :: String -> String
+normalise s =
+  either (const s) identity (parse s)
 
--- | Entry point - Parse a chord symbol
+-- | Parse a chord symbol
 parse :: String -> Either ParseError String
 parse s =
   runParser chordSymbol s
