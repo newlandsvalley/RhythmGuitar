@@ -38,7 +38,7 @@ Chord symbols are parsed and then normalised as far as possible to a canonical f
    * Major chords and variants.  Both forms of the kind ```Amaj``` or ```A``` are accepted with the former translated to the latter.
    * Minor chords and variants.  Both forms of the kind ```Bmin``` or ```Bm``` are accepted with the former translated to the latter.
    * Diminished sevenths.  Both forms of the kind ```Cdim``` or ```Cdim7``` are accepted with the former translated to the latter.
-   * Slash chords or the type ```F/C``` where the bass note is not the root of the chord are accpted but translated to the simple chord (e.g. ```F```).
+   * Slash chords of the type ```F/C``` where the bass note is not the root of the chord are accepted but translated to the simple chord (e.g. ```F```).
 
 ## To build
 
