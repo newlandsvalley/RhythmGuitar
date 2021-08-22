@@ -24,6 +24,17 @@ type MidiChordConfig =
   , gain :: Number -- the volume (between 0 and 1)
   }
 
+-- | a PSoM definition of a Pitch
+type PSPitch =
+  { pitchClass :: String
+  , octave :: Int
+  }
+
+type PSPitches = Array PSPitch
+
+-- | The Chord Map defined as a mapping between chord symbol and PSoM pitches
+type PSPitchChordMap = Map String PSPitches
+
 -- | default settings for MIDI chord definitions for properties that are usually static
 defaultMidiChordConfig :: MidiChordConfig
 defaultMidiChordConfig =
