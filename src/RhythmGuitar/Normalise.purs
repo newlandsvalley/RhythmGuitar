@@ -1,7 +1,7 @@
-module RhythmGuitar.Normalise 
+module RhythmGuitar.Normalise
   ( normalise
-  , parse) where
-
+  , parse
+  ) where
 
 import Control.Alt ((<|>))
 import Data.Either (Either, either)
@@ -26,77 +26,72 @@ chordSymbol :: Parser String
 chordSymbol =
   buildChordSymbol <$> rootNote <*> quality <*> extended <* optionalSlashNote
 
-rootNote :: Parser String 
+rootNote :: Parser String
 rootNote = enharmonicEquivalence <$> ((<>) <$> pitchClass <*> accidental)
 
 pitchClass :: Parser String
 pitchClass =
   regex "[A-G]"
 
-accidental :: Parser String 
+accidental :: Parser String
 accidental =
   option "" (regex "[b#]")
 
-quality :: Parser String 
+quality :: Parser String
 quality =
   option "" (major <|> minor <|> diminished <|> augmented <|> suspended)
 
-major :: Parser String 
-major =  
-  "" <$ string "maj"      
+major :: Parser String
+major =
+  "" <$ string "maj"
 
-minor :: Parser String 
-minor =  
+minor :: Parser String
+minor =
   "m" <$ (string "min" <|> string "m")
 
 diminished :: Parser String
-diminished = 
+diminished =
   string "dim"
 
 augmented :: Parser String
-augmented = 
-  string "+"     
+augmented =
+  string "+"
 
 suspended :: Parser String
-suspended = 
-  string "sus"    
+suspended =
+  string "sus"
 
-extended :: Parser String 
-extended = 
+extended :: Parser String
+extended =
   option "" (regex "[79]")
 
 -- we throw away any slashed base note after the chord symbol proper
 optionalSlashNote :: Parser String
-optionalSlashNote = 
+optionalSlashNote =
   "" <$ optionMaybe slashNote
- 
-slashNote :: Parser String 
-slashNote = 
+
+slashNote :: Parser String
+slashNote =
   (<>) <$> string "/" <*> rootNote
 
-buildChordSymbol :: String -> String -> String -> String 
-buildChordSymbol root qual extension = 
+buildChordSymbol :: String -> String -> String -> String
+buildChordSymbol root qual extension =
   root <> qual <> fullExtension
 
-  where 
+  where
   -- ensure we label chord symbols marked merely as dim to be dim7
-  fullExtension = 
-    if (qual == "dim") && (length extension == 0)
-      then 
-        "7"
-      else 
-        extension
+  fullExtension =
+    if (qual == "dim") && (length extension == 0) then
+      "7"
+    else
+      extension
 
-
-enharmonicEquivalence :: String -> String 
-enharmonicEquivalence = case _ of 
+enharmonicEquivalence :: String -> String
+enharmonicEquivalence = case _ of
   "Bb" -> "A#"
   "Db" -> "C#"
   "Eb" -> "D#"
   "Gb" -> "F#"
   "Ab" -> "G#"
   x -> x
-
-
-
 

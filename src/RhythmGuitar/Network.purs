@@ -9,20 +9,22 @@ import Affjax (defaultRequest, request)
 import Affjax.ResponseFormat as ResponseFormat
 import Data.Either (Either(..), either)
 import Data.HTTP.Method (Method(..))
-import Effect (Effect)
-import Effect.Aff (Aff, Fiber, launchAff)
+import Effect.Aff (Aff)
 import Effect.Console (log)
 import Effect.Class (liftEffect)
 import RhythmGuitar.Types (ChordShapes)
 import RhythmGuitar.Serialization.Json (readChords)
 
+-- | The default JSON representation of guitar chords is held at this URI
 defaultChordsJsonUri :: String
 defaultChordsJsonUri = "https://raw.githubusercontent.com/newlandsvalley/RhythmGuitar/main/guitar-chords.json"
 
+-- | load the chord shape definitions from the default location
 loadDefaultChordShapes :: Aff ChordShapes
 loadDefaultChordShapes =
   loadChordShapes defaultChordsJsonUri
 
+-- | load the chord shape definitions from the requested location
 loadChordShapes :: String -> Aff ChordShapes
 loadChordShapes url = do
   res <- request $ defaultRequest

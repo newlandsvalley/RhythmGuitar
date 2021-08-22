@@ -15,13 +15,13 @@ import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Halogen.HTML.Core (ClassName(..))
 import Prelude (Unit, ($), bind, pure, unit)
-import RhythmGuitar.Types (ChordMap)
-import RhythmGuitar.Audio (buildDefaultChordMap, playChordSymbol)
+import RhythmGuitar.Types (MidiPitchChordMap, defaultMidiChordConfig)
+import RhythmGuitar.Audio (buildMidiChordMap, playChordSymbol)
 import RhythmGuitar.Network (loadDefaultChordShapes)
 
 type State =
   { instruments :: Array Instrument
-  , chordMap :: ChordMap
+  , chordMap :: MidiPitchChordMap
   }
 
 type ChildSlots :: forall k. Row k
@@ -76,7 +76,7 @@ component =
       instruments <- H.liftAff $ loadRemoteSoundFonts [ AcousticGrandPiano, AcousticGuitarSteel ]
       chordShapes <- H.liftAff loadDefaultChordShapes
       let
-        chordMap = buildDefaultChordMap chordShapes
+        chordMap = buildMidiChordMap chordShapes
       H.modify_
         ( \st -> st
             { instruments = instruments
@@ -98,7 +98,15 @@ playChordSequence state chordSymbols = do
 
 playChord :: forall m. MonadAff m => State -> String -> m Unit
 playChord state chordSymbol = do
-  _ <- liftEffect $ playChordSymbol state.instruments chordSymbol state.chordMap
-  _ <- liftAff $ delay (Milliseconds 1750.0)
+  let 
+    duration = 1750.0
+  _ <- liftEffect $ 
+         playChordSymbol 
+         state.instruments 
+         chordSymbol 
+         defaultMidiChordConfig
+         duration
+         state.chordMap
+  _ <- liftAff $ delay (Milliseconds duration)
   pure unit
 

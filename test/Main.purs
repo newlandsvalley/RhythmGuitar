@@ -46,9 +46,9 @@ identitySuite =
     test "F# minor" do  
       assertRoundTrip "F#m"
     test "G diminished" do  
-      assertRoundTrip "Gdim"
+      assertRoundTrip "Gdim7"
     test "G# diminished" do  
-      assertRoundTrip "G#dim"
+      assertRoundTrip "G#dim7"
     test "A augmented" do  
       assertRoundTrip "A+"
     test "C suspended" do  
@@ -81,8 +81,8 @@ enharmonicEquivalenceSuite =
       assertCanonical "A#" "Bb" 
     test "Eb minor" do  
       assertCanonical "D#m" "Ebm"
-    test "Ab diminished" do  
-      assertCanonical "G#dim" "Abdim"
+    test "Ab diminished seventh" do  
+      assertCanonical "G#dim7" "Abdim7"
     test "Bb augmented" do  
       assertCanonical "A#+" "Bb+"
     test "Eb7" do  
