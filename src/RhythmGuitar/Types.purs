@@ -18,9 +18,11 @@ type ChordShape =
 -- | The set of chord shapes that we load from the JSON file
 type ChordShapes = Array ChordShape
 
--- | Configuration of the more static parameters for a MIDI-pitched note within a chord
+-- | Configuration of the MIDI-pitched note within a chord other than pitch
 type MidiChordConfig =
   { channel :: Int -- the MIDI channel
+  , timeOffset :: Number -- the time delay in seconds before the note is played
+  , duration :: Number -- the duration of the note in seconds
   , gain :: Number -- the volume (between 0 and 1)
   }
 
@@ -35,9 +37,11 @@ type PSPitches = Array PSPitch
 -- | The Chord Map defined as a mapping between chord symbol and PSoM pitches
 type PSPitchChordMap = Map String PSPitches
 
--- | default settings for MIDI chord definitions for properties that are usually static
+-- | default settings for MIDI chord definitions other than pitch
 defaultMidiChordConfig :: MidiChordConfig
 defaultMidiChordConfig =
   { channel: 1
+  , timeOffset: 0.0
+  , duration: 1.0
   , gain: 0.5
   }

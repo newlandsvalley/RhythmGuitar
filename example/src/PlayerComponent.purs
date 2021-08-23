@@ -14,7 +14,7 @@ import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Halogen.HTML.Core (ClassName(..))
-import Prelude (Unit, ($), bind, pure, unit)
+import Prelude (Unit, ($), (*), bind, pure, unit)
 import RhythmGuitar.Types (MidiPitchChordMap, defaultMidiChordConfig)
 import RhythmGuitar.Audio (buildMidiChordMap, playChordSymbol)
 import RhythmGuitar.Network (loadDefaultChordShapes)
@@ -99,14 +99,14 @@ playChordSequence state chordSymbols = do
 playChord :: forall m. MonadAff m => State -> String -> m Unit
 playChord state chordSymbol = do
   let 
-    duration = 1750.0
+    duration = 0.9
+    config = defaultMidiChordConfig { duration = duration }
   _ <- liftEffect $ 
          playChordSymbol 
          state.instruments 
          chordSymbol 
-         defaultMidiChordConfig
-         duration
+         config
          state.chordMap
-  _ <- liftAff $ delay (Milliseconds duration)
+  _ <- liftAff $ delay (Milliseconds (duration * 1000.0))
   pure unit
 
