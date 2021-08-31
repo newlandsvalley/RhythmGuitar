@@ -10,14 +10,13 @@ module RhythmGuitar.Audio
 import Audio.SoundFont (Instrument, MidiNote, playNotes)
 import Effect (Effect)
 import Data.Array ((!!))
+import Data.Array.NonEmpty (toArray)
 import Data.Map (fromFoldable, lookup)
 import Data.Maybe (Maybe(..), fromMaybe)
-import Prelude ((/), map, mod, pure)
+import Prelude ((/), ($), map, mod, pure)
 import RhythmGuitar.Types
 import RhythmGuitar.Normalise (normalise)
 import Data.Tuple (Tuple(..))
-
-import Debug (spy)
 
 -- | Build a map from chord symbol to MIDI note array
 buildMidiChordMap :: ChordShapes -> MidiPitchChordMap
@@ -30,7 +29,7 @@ buildMidiChordMap chordShapes =
 -- | Build a MIDI chord, suitable for a soundfont player
 buildMidiChord :: MidiChordConfig -> Pitches -> Array MidiNote
 buildMidiChord config pitches =
-  map (buildMidiNote config) pitches
+  toArray $ map (buildMidiNote config) pitches
 
 -- | Build a map from chord symbol to PSoM note array
 buildPSChordMap :: ChordShapes -> PSPitchChordMap
@@ -57,12 +56,9 @@ playChordSymbol instruments chordSym config midiPitchMap = do
   case (lookupChordMidiPitches chordSym midiPitchMap) of
     Just pitches -> do
       let
-        _ = spy "playing chord" chordSym
         chord = buildMidiChord config pitches
       playNotes instruments chord
     _ -> do
-      let
-        _ = spy "nothing to play" chordSym
       pure 0.0
 
 -- build a MIDINote defintion for use in a MIDI chord

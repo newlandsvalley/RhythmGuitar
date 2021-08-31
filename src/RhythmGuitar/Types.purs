@@ -1,10 +1,11 @@
 module RhythmGuitar.Types where
 
 import Data.Map (Map)
+import Data.Array.NonEmpty (NonEmptyArray)
 
 type MidiPitch = Int
 
-type Pitches = Array MidiPitch
+type Pitches = NonEmptyArray MidiPitch
 
 -- | The Chord Map defined as a mapping between chord symbol and MIDI pitches
 type MidiPitchChordMap = Map String Pitches
@@ -32,7 +33,7 @@ type PSPitch =
   , octave :: Int
   }
 
-type PSPitches = Array PSPitch
+type PSPitches = NonEmptyArray PSPitch
 
 -- | The Chord Map defined as a mapping between chord symbol and PSoM pitches
 type PSPitchChordMap = Map String PSPitches
