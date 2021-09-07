@@ -65,6 +65,8 @@ identitySuite =
       assertRoundTrip "Gm7"
     test "G#m7" do  
       assertRoundTrip "G#m7"
+    test "GM7" do  
+      assertRoundTrip "GM7"
 
 normaliseSuite :: Free TestF Unit
 normaliseSuite =
@@ -72,7 +74,11 @@ normaliseSuite =
     test "A major" do  
       assertCanonical "A" "Amaj"      
     test "B minor" do  
-      assertCanonical "Bm" "Bmin"
+      assertCanonical "Bm" "Bmin"    
+    test "B major seventh" do  
+      assertCanonical "BM7" "Bmaj7"   
+    test "B Major seventh" do  
+      assertCanonical "BM7" "BMaj7"
 
 enharmonicEquivalenceSuite :: Free TestF Unit
 enharmonicEquivalenceSuite =       

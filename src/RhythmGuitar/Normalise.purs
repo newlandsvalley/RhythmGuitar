@@ -6,10 +6,10 @@ module RhythmGuitar.Normalise
 import Control.Alt ((<|>))
 import Data.Either (Either, either)
 import Data.String (length)
-import Prelude ((<>), (<$), (<$>), (<*>), (<*), (&&), (==), const, identity)
+import Prelude ((<>), (<$), (<$>), (<*>), (<*), (&&), (==), ($), const, identity)
 import Text.Parsing.StringParser (Parser, ParseError, runParser)
 import Text.Parsing.StringParser.CodePoints (string, regex)
-import Text.Parsing.StringParser.Combinators (option, optionMaybe)
+import Text.Parsing.StringParser.Combinators (choice, option, optionMaybe)
 
 -- | Entry point - normalise a chord symbol to its canonical form
 -- | if it fails to parse, give back the original
@@ -39,7 +39,19 @@ accidental =
 
 quality :: Parser String
 quality =
-  option "" (major <|> minor <|> diminished <|> augmented <|> suspended)
+  
+  option "" $ choice 
+    [ majorSeventh    -- must come before major because of ambiguity
+    , major 
+    , minor
+    , diminished
+    , augmented
+    , suspended
+    ]
+
+majorSeventh :: Parser String
+majorSeventh =
+  "M7" <$ (string "M7" <|> string "maj7"<|> string "Maj7")
 
 major :: Parser String
 major =

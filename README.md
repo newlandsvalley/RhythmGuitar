@@ -2,7 +2,7 @@
 
 This project notates a set of basic chord shapes that could be played at the first position on a rhythm guitar.  These are represented as patterns of MIDI notes that are suitable for use with a suitable [soundfonts](https://github.com/newlandsvalley/purescript-soundfonts) player.
 
-The idea is eventually to provide a version of [abc-melody](https://github.com/newlandsvalley/purescript-abc-melody) that supports a player which plays the tune on channel 0 and the guitar accompaniment on channel 1 and that doesn't sound absolutely terrible!
+The idea is to support a version of [abc-melody](https://github.com/newlandsvalley/purescript-abc-melody) that builds a player which plays the tune on channel 0 and the guitar accompaniment on channel 1 and that doesn't sound absolutely terrible!
 
 ## Chord Symbol Syntax
 
@@ -17,11 +17,11 @@ There is also a useful description of chord symbols in [wikipedia](https://en.wi
    * Seventh chords - for example: ```A7, Bb7, C#7```
    * Minor seventh chords - for example: ```Dm7, Ebm7, F#m7```
    * Diminished seventh chords - for example: ```Ebdim7, Gdim7, C#dim7```
+   * Major seventh chords - for example: ```Amaj7, Bbmaj7, C#maj7```
 
 ### To come
 
    * Ninth chords - for example: ```A9, Bb9, C#9```
-   * Major seventh chords - for example: ```Amaj7, Bbmaj7, C#maj7```
    * Suspended chords - for example: ```Ebsus, Gsus, C#sus```
 
 ### Other chords and voicings
@@ -38,6 +38,7 @@ Chord symbols are parsed and then normalised as far as possible to a canonical f
    * Major chords and variants.  Both forms of the kind ```Amaj``` or ```A``` are accepted with the former translated to the latter.
    * Minor chords and variants.  Both forms of the kind ```Bmin``` or ```Bm``` are accepted with the former translated to the latter.
    * Diminished sevenths.  Both forms of the kind ```Cdim``` or ```Cdim7``` are accepted with the former translated to the latter.
+   * Major sevenths.  Both forms of the kind ```Cmaj7``` or ```CM7``` are accepted with the former translated to the latter.
    * Slash chords of the type ```F/C``` where the bass note is not the root of the chord are accepted but translated to the simple chord (e.g. ```F```).
 
 ## To build
