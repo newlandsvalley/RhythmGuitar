@@ -7,9 +7,9 @@ import Control.Alt ((<|>))
 import Data.Either (Either, either)
 import Data.String (length)
 import Prelude ((<>), (<$), (<$>), (<*>), (<*), (&&), (==), ($), const, identity)
-import Text.Parsing.StringParser (Parser, ParseError, runParser)
-import Text.Parsing.StringParser.CodePoints (string, regex)
-import Text.Parsing.StringParser.Combinators (choice, option, optionMaybe)
+import StringParser (Parser, ParseError, runParser)
+import StringParser.CodePoints (string, regex)
+import StringParser.Combinators (choice, option, optionMaybe)
 
 -- | Entry point - normalise a chord symbol to its canonical form
 -- | if it fails to parse, give back the original

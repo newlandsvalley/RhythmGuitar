@@ -99,6 +99,38 @@ in  upstream
 -------------------------------
 -}
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.14.3-20210811/packages.dhall sha256:a2de7ef2f2e753733eddfa90573a82da0c7c61d46fa87d015b7f15ef8a6e97d5
+      https://github.com/purescript/package-sets/releases/download/psc-0.14.7-20220321/packages.dhall
+        sha256:dff91304260c1196273badf7d8141e66ab16bed147b95aa175dd8a84ec87d58f
 
 in  upstream
+  with soundfonts =
+    { dependencies =
+      [ "aff"
+      , "affjax"
+      , "argonaut-core"
+      , "arraybuffer-types"
+      , "arrays"
+      , "b64"
+      , "bifunctors"
+      , "console"
+      , "effect"
+      , "either"
+      , "exceptions"
+      , "foldable-traversable"
+      , "foreign-object"
+      , "http-methods"
+      , "integers"
+      , "lists"
+      , "maybe"
+      , "midi"
+      , "ordered-collections"
+      , "parallel"
+      , "partial"
+      , "prelude"
+      , "strings"
+      , "transformers"
+      , "tuples"
+      ]
+    , repo = "https://github.com/newlandsvalley/purescript-soundfonts.git"
+    , version = "v3.3.0"
+    }
