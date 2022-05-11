@@ -14,6 +14,7 @@ to generate this file without the comments in this block.
 , dependencies =
   [ "aff"
   , "affjax"
+  , "affjax-web"
   , "arrays"
   , "console"
   , "control"
@@ -24,13 +25,14 @@ to generate this file without the comments in this block.
   , "maybe"
   , "ordered-collections"
   , "prelude"
-  , "psci-support"
-  , "simple-json"
   , "soundfonts"
   , "string-parsers"
   , "strings"
   , "tuples"
+  , "yoga-json"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
+, license = "MIT"
+, repository = "https://github.com/newlandsvalley/rhythm-guitar"
 }

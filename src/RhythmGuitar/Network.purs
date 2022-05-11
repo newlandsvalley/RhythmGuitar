@@ -5,7 +5,7 @@ module RhythmGuitar.Network
 
 import Prelude
 
-import Affjax (defaultRequest, request)
+import Affjax.Web (defaultRequest, request)
 import Affjax.ResponseFormat as ResponseFormat
 import Data.Either (Either(..), either)
 import Data.HTTP.Method (Method(..))

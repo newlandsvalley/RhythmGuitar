@@ -3,7 +3,7 @@ module RhythmGuitar.Serialization.Json where
 import Data.Either (Either)
 import Foreign (MultipleErrors)
 import RhythmGuitar.Types as Guitar
-import Simple.JSON as JSON
+import Yoga.JSON as JSON
 
 writeChords :: Guitar.ChordShapes -> String
 writeChords =
