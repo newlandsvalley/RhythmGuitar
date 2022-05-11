@@ -1,106 +1,107 @@
 module Test.Main where
 
-import Control.Monad.Free (Free)
 import Data.Either (Either(..))
 import Effect (Effect)
-import Prelude ((<>), Unit, discard, show)
-import Test.Unit (Test, TestF, suite, test, failure)
-import Test.Unit.Assert as Assert
-import Test.Unit.Main (runTest)
+import Effect.Aff (Aff, launchAff_)
+import Prelude ((<>), ($), Unit, discard, show)
+import Test.Spec (Spec, describe, it)
+import Test.Spec.Assertions (fail, shouldEqual)
+import Test.Spec.Reporter (specReporter)
+import Test.Spec.Runner (runSpec)
 import RhythmGuitar.Normalise (parse)
 
-assertRoundTrip :: String  -> Test
+assertRoundTrip :: String  -> Aff Unit
 assertRoundTrip s  =
   case (parse s) of
     Right chordSym ->
-      Assert.equal s chordSym
+      s `shouldEqual` chordSym
 
     Left err ->
-      failure ("parse failed: " <> (show err))
+      fail ("parse failed: " <> (show err))
       
-assertCanonical :: String -> String -> Test
+assertCanonical :: String -> String -> Aff Unit
 assertCanonical canonical s  =
   case (parse s) of
     Right chordSym ->
-      Assert.equal canonical chordSym
+      canonical `shouldEqual` chordSym
 
     Left err ->
-      failure ("parse failed: " <> (show err))
+      fail ("parse failed: " <> (show err))
 
 main :: Effect Unit
-main = runTest do
-  identitySuite
-  normaliseSuite
-  enharmonicEquivalenceSuite
-  ignoredSlashNoteSuite
+main = launchAff_ $ runSpec [ specReporter] do
+  describe "rhythm guitar" do
+    identitySpec
+    normaliseSpec
+    enharmonicEquivalenceSpec
+    ignoredSlashNoteSpec
 
-identitySuite :: Free TestF Unit
-identitySuite =
-  suite "chord symbols requiring no normalisation" do
-    test "A major" do  
+identitySpec :: Spec Unit
+identitySpec =
+  describe "chord symbols requiring no normalisation" do
+    it "recognizes A major" do  
       assertRoundTrip "A"
-    test "C# major" do  
+    it "recognizes C# major" do  
       assertRoundTrip "C#"
-    test "D minor" do  
+    it "recognizes D minor" do  
       assertRoundTrip "Dm"
-    test "F# minor" do  
+    it "recognizes F# minor" do  
       assertRoundTrip "F#m"
-    test "G diminished" do  
+    it "recognizes G diminished" do  
       assertRoundTrip "Gdim7"
-    test "G# diminished" do  
+    it "recognizes G# diminished" do  
       assertRoundTrip "G#dim7"
-    test "A augmented" do  
+    it "recognizes A augmented" do  
       assertRoundTrip "A+"
-    test "C suspended" do  
+    it "recognizes C suspended" do  
       assertRoundTrip "Csus"
-    test "C# augmented" do  
+    it "recognizes C# augmented" do  
       assertRoundTrip "C#+"
-    test "D7" do  
+    it "recognizes D7" do  
       assertRoundTrip "D7"
-    test "F#7" do  
+    it "recognizes F#7" do  
       assertRoundTrip "F#7" 
-    test "F#m7" do  
+    it "recognizes F#m7" do  
       assertRoundTrip "F#m7"
-    test "Gm7" do  
+    it "recognizes Gm7" do  
       assertRoundTrip "Gm7"
-    test "G#m7" do  
+    it "recognizes G#m7" do  
       assertRoundTrip "G#m7"
-    test "GM7" do  
+    it "recognizes GM7" do  
       assertRoundTrip "GM7"
 
-normaliseSuite :: Free TestF Unit
-normaliseSuite =
-  suite "chord symbols requiring simple substitution normalisation" do       
-    test "A major" do  
+normaliseSpec :: Spec Unit
+normaliseSpec =
+  describe "chord symbols requiring simple substitution normalisation" do       
+    it "normalizes A major" do  
       assertCanonical "A" "Amaj"      
-    test "B minor" do  
+    it "normalizes B minor" do  
       assertCanonical "Bm" "Bmin"    
-    test "B major seventh" do  
+    it "normalizes B major seventh" do  
       assertCanonical "BM7" "Bmaj7"   
-    test "B Major seventh" do  
+    it "normalizes B Major seventh" do  
       assertCanonical "BM7" "BMaj7"
 
-enharmonicEquivalenceSuite :: Free TestF Unit
-enharmonicEquivalenceSuite =       
-  suite "enharmonic equivalence" do    
-    test "Bb major" do  
+enharmonicEquivalenceSpec :: Spec Unit
+enharmonicEquivalenceSpec =       
+  describe "enharmonic equivalence" do    
+    it "to Bb major" do  
       assertCanonical "A#" "Bb" 
-    test "Eb minor" do  
+    it "to Eb minor" do  
       assertCanonical "D#m" "Ebm"
-    test "Ab diminished seventh" do  
+    it "to Ab diminished seventh" do  
       assertCanonical "G#dim7" "Abdim7"
-    test "Bb augmented" do  
+    it "to Bb augmented" do  
       assertCanonical "A#+" "Bb+"
-    test "Eb7" do  
+    it "to Eb7" do  
       assertCanonical "D#7" "Eb7"
-    test "Abm7" do  
+    it "to Abm7" do  
       assertCanonical "G#m7" "Abm7"     
-    test "Bb minor" do  
+    it "to Bb minor" do  
       assertCanonical "A#m" "Bbmin"    
 
-
-ignoredSlashNoteSuite :: Free TestF Unit
-ignoredSlashNoteSuite =         
-  suite "ignored slash note" do     
-    test "C/G" do  
+ignoredSlashNoteSpec :: Spec Unit
+ignoredSlashNoteSpec =         
+  describe "ignored slash note" do     
+    it "ignores G in C/G" do  
       assertCanonical "C" "C/G"             
