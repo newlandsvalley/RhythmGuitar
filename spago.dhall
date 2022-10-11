@@ -26,10 +26,10 @@ to generate this file without the comments in this block.
   , "ordered-collections"
   , "prelude"
   , "soundfonts"
+  , "simple-json"
   , "string-parsers"
   , "strings"
   , "tuples"
-  , "yoga-json"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
