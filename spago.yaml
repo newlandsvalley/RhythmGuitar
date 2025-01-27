@@ -1,0 +1,32 @@
+package:
+  dependencies:
+    - aff
+    - affjax
+    - affjax-web
+    - arrays
+    - console
+    - control
+    - effect
+    - either
+    - foreign
+    - http-methods
+    - maybe
+    - ordered-collections
+    - prelude
+    - simple-json
+    - soundfonts
+    - string-parsers
+    - strings
+    - tuples
+  name: rhythm-guitar
+  test:
+    main: Test.Main
+    dependencies:
+      - aff
+      - effect
+      - spec
+      - spec-node
+workspace:
+  extraPackages: {}
+  packageSet:
+    registry: 62.3.2

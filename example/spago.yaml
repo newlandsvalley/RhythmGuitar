@@ -1,0 +1,9 @@
+package:
+  name: example
+  dependencies:
+    - aff
+    - console
+    - effect
+    - rhythm-guitar
+    - halogen
+    - soundfonts
